@@ -316,17 +316,21 @@ app.post("/api/ai/chat", auth, async (req, res) => {
   }
 });
 
-const distPath = path.resolve(__dirname, "..", "dist");
-app.use(express.static(distPath));
+export { app };
 
-app.get("*", (_req, res) => {
-  res.sendFile(path.join(distPath, "index.html"), (error) => {
-    if (error) {
-      res.status(404).json({ error: "Not found." });
-    }
+if (!process.env.VERCEL) {
+  const distPath = path.resolve(__dirname, "..", "dist");
+  app.use(express.static(distPath));
+
+  app.get("*", (_req, res) => {
+    res.sendFile(path.join(distPath, "index.html"), (error) => {
+      if (error) {
+        res.status(404).json({ error: "Not found." });
+      }
+    });
   });
-});
 
-app.listen(port, () => {
-  console.log(`Kova API running on http://localhost:${port}`);
-});
+  app.listen(port, () => {
+    console.log(`Kova API running on http://localhost:${port}`);
+  });
+}

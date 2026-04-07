@@ -35,6 +35,33 @@ npm install
 npm run dev
 ```
 
+## Vercel Deployment
+
+This repo is configured to work as a Vercel project with:
+
+- a Vite frontend
+- serverless `/api/*` routes backed by the existing Node/Express app
+
+In Vercel, add these environment variables for the production deployment:
+
+- `GEMINI_API_KEY`
+- `GEMINI_MODEL`
+- `SUPABASE_URL`
+- `SUPABASE_ANON_KEY`
+- `SUPABASE_SERVICE_ROLE_KEY`
+- `SUPABASE_SCHEMA`
+
+After setting them, redeploy the project.
+
+If you want to update them later:
+
+1. Open your Vercel project.
+2. Go to `Settings` > `Environment Variables`.
+3. Add or edit the variables above for `Production` and, if needed, `Preview`.
+4. Redeploy.
+
+The API is exposed through the same project under `/api/*`, so the frontend can keep using relative requests.
+
 ## Useful Scripts
 
 - `npm run dev` starts the full local app
@@ -76,7 +103,8 @@ npm run supabase:link
 npm run supabase:push
 ```
 
-## Notes
+## Production Notes
 
 - Rotate any exposed API keys and service-role keys.
-- The backend is wired for local development and Supabase-backed persistence, but production deployment still depends on the hosting target you choose.
+- Keep `.env.local` private.
+- If you want a separate API host instead of Vercel serverless, the same Express code can be deployed to Render, Fly, or Railway with a small wrapper.
