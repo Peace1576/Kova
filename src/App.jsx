@@ -34,6 +34,7 @@ export function App() {
         <Route path="/sign-up" element={<AuthPage mode="sign-up" />} />
         <Route path="/app" element={<DashboardPage />} />
         <Route path="/app/ai" element={<AiPage />} />
+        <Route path="/app/brain" element={<AiPage />} />
         <Route path="/app/audit" element={<AgreementAuditPage />} />
         <Route path="/app/status" element={<IntegrationStatusPage />} />
         <Route path="/app/admin/review" element={<AdminReviewPage />} />

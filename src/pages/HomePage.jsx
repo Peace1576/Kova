@@ -5,7 +5,7 @@ import { homeSections, kovaProducts } from "../data/kovaData";
 
 export function HomePage() {
   const [products, setProducts] = useState(kovaProducts);
-  const [active, setActive] = useState("legal");
+  const [active, setActive] = useState("saver");
 
   useEffect(() => {
     let mounted = true;
@@ -30,12 +30,12 @@ export function HomePage() {
     <>
       <section className="hero container reveal is-visible">
         <div className="hero-copy">
-          <span className="eyebrow">AI advocate, built to protect you</span>
+          <span className="eyebrow">Kova Brain, built to help you move</span>
           <h1>
-            Your rights. Your money. <span>Protected.</span>
+            Your money. Your work. <span>Clear.</span>
           </h1>
           <p className="lede">
-            Kova analyzes contracts, negotiates bills, and navigates permits so people stop getting taken advantage of.
+            Kova helps you move faster with money, documents, and permits so the hard parts do not slow you down.
           </p>
 
           <div className="hero-actions">
@@ -123,11 +123,11 @@ export function HomePage() {
       <section className="section container">
         <div className="section-head">
           <div>
-            <span className="eyebrow">Simple process</span>
-            <h2>Works in three steps.</h2>
-          </div>
-          <p className="section-copy">
-            No lawyers, no chasing providers, and no guesswork. Kova keeps the user in control.
+          <span className="eyebrow">Simple process</span>
+          <h2>Works in three steps.</h2>
+        </div>
+        <p className="section-copy">
+            No busywork, no chasing providers, and no guesswork. Kova keeps the user in control.
           </p>
         </div>
 
@@ -146,15 +146,15 @@ export function HomePage() {
         <div className="section-head">
           <div>
             <span className="eyebrow">Start now</span>
-            <h2>One platform. Three advocates.</h2>
+            <h2>One platform. Three paths.</h2>
           </div>
-          <p className="section-copy">Start with the one that helps most today. Expand when ready, under one account.</p>
+          <p className="section-copy">Start with the path that helps most today. Expand when ready, under one account.</p>
         </div>
 
         <div className="pricing-grid">
           {products.map((product) => (
-            <article className={`price-card price-${product.color} ${product.slug === "legal" ? "featured" : ""}`} key={product.slug}>
-              {product.slug === "legal" ? <span className="featured-badge">{product.badge}</span> : <span className="price-tag">{product.badge}</span>}
+            <article className={`price-card price-${product.color} ${product.slug === "saver" ? "featured" : ""}`} key={product.slug}>
+              {product.slug === "saver" ? <span className="featured-badge">{product.badge}</span> : <span className="price-tag">{product.badge}</span>}
               <div className="price" style={{ color: product.colorValue }}>
                 {product.price}
               </div>

@@ -5,7 +5,7 @@ import { agreementDocs, agreementPlanRequirements } from "../data/kovaData";
 
 const planLabels = {
   saver: "Money saver",
-  legal: "Legal shield",
+  legal: "Document brain",
   build: "Build smarter",
 };
 
@@ -131,8 +131,8 @@ export function AgreementViewerPage() {
             <Link className="btn btn-ghost" to={primaryPlanSlug ? `/legal/consent?plan=${primaryPlanSlug}` : "/legal/consent?plan=legal"}>
               Open consent flow
             </Link>
-            <Link className="btn btn-ghost" to={`/app/ai?doc=${doc.slug}`}>
-              Ask Gemini
+            <Link className="btn btn-ghost" to={`/app/brain?doc=${doc.slug}`}>
+              Open brain
             </Link>
           </div>
         </aside>

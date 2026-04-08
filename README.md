@@ -1,6 +1,6 @@
 # Kova
 
-Kova is a routed React/Vite app with a Node API, Supabase-backed persistence, agreement previews, audit logs, and a Gemini-powered assistant.
+Kova is a routed React/Vite app with a Node API, Supabase-backed persistence, agreement previews, audit logs, and a Kova Brain assistant.
 
 ## What’s included
 
@@ -8,7 +8,7 @@ Kova is a routed React/Vite app with a Node API, Supabase-backed persistence, ag
 - Auth flows backed by local storage or Supabase tables
 - Legal consent gating with scroll-to-accept and audit logging
 - In-app agreement viewer and review tools
-- Live integration status page for Gemini and Supabase
+- Live integration status page for the brain and Supabase
 - Supabase migrations for auth, audit events, and seeded product data
 
 ## Tech Stack
@@ -17,7 +17,7 @@ Kova is a routed React/Vite app with a Node API, Supabase-backed persistence, ag
 - Vite
 - Express
 - Supabase
-- Gemini API
+- Brain API
 
 ## Getting Started
 
@@ -44,8 +44,8 @@ This repo is configured to work as a Vercel project with:
 
 In Vercel, add these environment variables for the production deployment:
 
-- `GEMINI_API_KEY`
-- `GEMINI_MODEL`
+- `BRAIN_API_KEY` or `GROQ_API_KEY`
+- `BRAIN_MODEL`
 - `SUPABASE_URL`
 - `SUPABASE_ANON_KEY`
 - `SUPABASE_SERVICE_ROLE_KEY`
@@ -77,8 +77,8 @@ The API is exposed through the same project under `/api/*`, so the frontend can 
 
 Keep secrets in `.env.local`, not in source control.
 
-- `GEMINI_API_KEY`
-- `GEMINI_MODEL`
+- `BRAIN_API_KEY` or `GROQ_API_KEY`
+- `BRAIN_MODEL`
 - `SUPABASE_URL`
 - `SUPABASE_ANON_KEY`
 - `SUPABASE_SERVICE_ROLE_KEY`

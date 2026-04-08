@@ -26,7 +26,7 @@ import {
   userFromToken,
   productBySlug,
 } from "./store.js";
-import { askGemini, getIntegrationStatus, mirrorAiEvent } from "./integrations.js";
+import { askBrain, getIntegrationStatus, mirrorAiEvent } from "./integrations.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -269,7 +269,7 @@ app.post("/api/admin/agreements/:slug/review", async (req, res) => {
   res.json({ doc });
 });
 
-app.post("/api/ai/chat", auth, async (req, res) => {
+async function handleBrainChat(req, res) {
   try {
     const question = String(req.body?.question || "").trim();
     const docSlug = String(req.body?.docSlug || "").trim();
@@ -280,16 +280,16 @@ app.post("/api/ai/chat", auth, async (req, res) => {
     }
 
     const prompt = [
-      "You are Kova AI, a product assistant for a legal, financial, and permit workflow app.",
+      "You are Kova Brain, the product assistant for money, rights, work, and permit workflows.",
       "Be practical, concise, and careful.",
       "Do not claim to be a lawyer or provide legal advice.",
       doc
         ? `Document context:\nName: ${doc.name}\nVersion: ${doc.version || "n/a"}\nExcerpt: ${doc.acceptedText || doc.excerpt}\nHighlights: ${(doc.highlights || []).join("; ")}`
-        : "No specific agreement was provided. Answer in the context of Kova product guidance.",
+        : "No specific document was provided. Answer in the context of Kova product guidance.",
       `User question: ${question}`,
     ].join("\n\n");
 
-    const result = await askGemini({
+    const result = await askBrain({
       systemInstruction:
         "You are a careful assistant. If the user asks for legal advice, remind them to consult a licensed attorney and stay focused on product guidance, document summaries, or workflow help.",
       prompt,
@@ -308,13 +308,17 @@ app.post("/api/ai/chat", auth, async (req, res) => {
 
     res.json({
       model: result.model,
+      provider: result.provider,
       answer: result.text,
       document: doc ? { slug: doc.slug, name: doc.name, version: doc.version } : null,
     });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
-});
+}
+
+app.post("/api/brain/chat", auth, handleBrainChat);
+app.post("/api/ai/chat", auth, handleBrainChat);
 
 export { app };
 

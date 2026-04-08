@@ -4,3 +4,5 @@
 *.log
 node_modules/
 dist/
+.claude/
+server/data/kova-db.json

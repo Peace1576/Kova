@@ -5,10 +5,10 @@ import { api } from "../lib/api";
 import { agreementDocs } from "../data/kovaData";
 
 const quickPrompts = [
-  "Summarize the selected agreement in plain English.",
+  "Summarize the selected document in plain English.",
   "What are the biggest risks or red flags?",
-  "What should I ask counsel to review first?",
-  "Explain the arbitration or liability language simply.",
+  "What should I ask my team to review first?",
+  "Explain the key terms simply.",
 ];
 
 export function AiPage() {
@@ -46,7 +46,7 @@ export function AiPage() {
     setError("");
     setAnswer("");
     try {
-      const data = await api.aiChat({
+      const data = await api.brainChat({
         question,
         docSlug,
       });
@@ -62,8 +62,8 @@ export function AiPage() {
     <section className="section container">
       <div className="section-head">
         <div>
-          <span className="eyebrow">Kova AI</span>
-          <h2>Ask Gemini about a document or workflow.</h2>
+          <span className="eyebrow">Kova Brain</span>
+          <h2>Ask the brain about a document or workflow.</h2>
         </div>
         <Link className="btn btn-ghost btn-sm" to="/app">
           Back to dashboard
@@ -75,17 +75,17 @@ export function AiPage() {
           <div className="panel-head">
             <div>
               <p className="panel-kicker">Integration status</p>
-              <h3>Gemini and Supabase</h3>
+              <h3>Brain and Supabase</h3>
             </div>
-            <span className={`status-chip ${status?.gemini ? "status-chip-success" : ""}`}>
-              {status?.gemini ? "Gemini ready" : "Gemini not set"}
+            <span className={`status-chip ${status?.brain ? "status-chip-success" : ""}`}>
+              {status?.brain ? "Brain ready" : "Brain not set"}
             </span>
           </div>
 
           <div className="audit-summary-grid">
             <div className="audit-summary-card">
-              <span>Gemini key</span>
-              <strong>{status?.gemini ? "Loaded from env" : "Missing"}</strong>
+              <span>Brain key</span>
+              <strong>{status?.brain ? "Loaded from env" : "Missing"}</strong>
             </div>
             <div className="audit-summary-card">
               <span>Supabase</span>
@@ -93,7 +93,7 @@ export function AiPage() {
             </div>
             <div className="audit-summary-card">
               <span>Model</span>
-              <strong>{status?.geminiModel || "gemini-2.0-flash"}</strong>
+              <strong>{status?.brainModel || "llama-3.1-70b-versatile"}</strong>
             </div>
             <div className="audit-summary-card">
               <span>Schema</span>
@@ -109,17 +109,17 @@ export function AiPage() {
           </div>
 
           <div className="module-cta-row">
-            <Link className="btn btn-primary" to={`/agreements/${selectedDoc.slug}`}>
+              <Link className="btn btn-primary" to={`/agreements/${selectedDoc.slug}`}>
               Open viewer
-            </Link>
-            <Link className="btn btn-ghost" to="/app/audit">
+              </Link>
+              <Link className="btn btn-ghost" to="/app/audit">
               Open audit log
-            </Link>
+              </Link>
           </div>
         </article>
 
         <article className="panel">
-          <span className="panel-kicker">Ask Gemini</span>
+          <span className="panel-kicker">Ask the brain</span>
           <h3>Get a quick explanation or risk summary.</h3>
 
           <form onSubmit={submit} className="ai-form">
@@ -140,7 +140,6 @@ export function AiPage() {
                 rows="5"
                 value={question}
                 onChange={(event) => setQuestion(event.target.value)}
-                placeholder="Ask Gemini to summarize the selected agreement..."
               />
             </label>
 
@@ -154,10 +153,10 @@ export function AiPage() {
 
             <div className="module-cta-row">
               <button className="btn btn-primary" type="submit" disabled={busy}>
-                {busy ? "Thinking..." : "Ask Gemini"}
+                {busy ? "Thinking..." : "Ask the brain"}
               </button>
               <Link className="btn btn-ghost" to={`/legal/disclosure?plan=legal`}>
-                Review legal flow
+                Review disclosure
               </Link>
             </div>
           </form>
@@ -167,7 +166,7 @@ export function AiPage() {
           {answer ? (
             <div className="viewer-paper ai-answer">
               <div className="viewer-paper-top">
-                <strong>Gemini response</strong>
+                <strong>Brain response</strong>
                 <span>{selectedDoc.name}</span>
               </div>
               <pre className="viewer-accepted-text">{answer}</pre>

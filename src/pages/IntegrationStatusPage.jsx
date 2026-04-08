@@ -7,7 +7,7 @@ const mirroredTables = [
   { name: "kova_users", description: "Primary auth records" },
   { name: "kova_sessions", description: "Bearer sessions" },
   { name: "kova_legal_events", description: "Consent and audit events" },
-  { name: "kova_ai_events", description: "Gemini prompts and responses" },
+  { name: "kova_ai_events", description: "Brain prompts and responses" },
   { name: "kova_flow_events", description: "Flow lifecycle events" },
 ];
 
@@ -31,7 +31,7 @@ export function IntegrationStatusPage() {
       <div className="section-head">
         <div>
           <span className="eyebrow">Integrations</span>
-          <h2>Live Gemini and Supabase status.</h2>
+          <h2>Live brain and Supabase status.</h2>
         </div>
         <Link className="btn btn-ghost btn-sm" to="/app">
           Back to dashboard
@@ -46,8 +46,8 @@ export function IntegrationStatusPage() {
           {status ? (
             <div className="audit-summary-grid">
               <div className="audit-summary-card">
-                <span>Gemini</span>
-                <strong>{status.gemini ? "Connected" : "Missing"}</strong>
+                <span>Brain</span>
+                <strong>{status.brain ? "Connected" : "Missing"}</strong>
               </div>
               <div className="audit-summary-card">
                 <span>Supabase</span>
@@ -68,7 +68,7 @@ export function IntegrationStatusPage() {
 
           <div className="agreement-note">
             <strong>Current model</strong>
-            <p>{status?.geminiModel || "gemini-2.0-flash"}</p>
+            <p>{status?.brainModel || "llama-3.1-70b-versatile"}</p>
           </div>
         </article>
 
@@ -94,6 +94,7 @@ export function IntegrationStatusPage() {
           <span className="panel-kicker">Setup notes</span>
           <h3>What still needs to be configured in Supabase.</h3>
           <ul className="audit-checklist">
+            <li>Keep `BRAIN_API_KEY` in `.env.local` only.</li>
             <li>Run the migrations in `supabase/migrations/`.</li>
             <li>Keep `SUPABASE_URL`, `SUPABASE_ANON_KEY`, and `SUPABASE_SERVICE_ROLE_KEY` in `.env.local` only.</li>
             <li>Rotate any exposed keys before going live.</li>

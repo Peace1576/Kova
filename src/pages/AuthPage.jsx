@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { agreementDocs, agreementPlanRequirements } from "../data/kovaData";
+import { agreementDocs, agreementPlanRequirements, kovaProducts } from "../data/kovaData";
 
 export function AuthPage({ mode }) {
   const navigate = useNavigate();
@@ -21,6 +21,10 @@ export function AuthPage({ mode }) {
   const isSignIn = mode === "sign-in";
   const requiredDocs = useMemo(
     () => (agreementPlanRequirements[form.plan] || []).map((slug) => agreementDocs.find((doc) => doc.slug === slug)).filter(Boolean),
+    [form.plan]
+  );
+  const selectedProduct = useMemo(
+    () => kovaProducts.find((product) => product.slug === form.plan),
     [form.plan]
   );
 
@@ -73,7 +77,7 @@ export function AuthPage({ mode }) {
         <span className="eyebrow">Account</span>
         <h2>{isSignIn ? "Sign in to Kova." : "Create your Kova account."}</h2>
         <p className="lede">
-          Use one account for money, rights, and permits. The backend stores the session token and the app uses it on every API request.
+          Use one account for money, work, and permits. The backend stores the session token and the app uses it on every API request.
         </p>
         <div className="auth-note">
           <strong>Included flows</strong>
@@ -81,11 +85,11 @@ export function AuthPage({ mode }) {
         </div>
         {!isSignIn ? (
           <div className="agreement-note">
-            <strong>Legal gate status</strong>
+            <strong>Consent status</strong>
             <p>
               {gate
-                ? `You completed the scroll review and accepted ${gate.requiredDocs.length} required document(s) on the legal consent page.`
-              : "Complete the legal consent page before signup."}
+                ? `You completed the scroll review and accepted ${gate.requiredDocs.length} required document(s) for ${selectedProduct?.name || form.plan}.`
+              : "Complete the consent page before signup."}
             </p>
             <div className="agreement-highlight-row">
               {requiredDocs.map((doc) => (
@@ -96,7 +100,7 @@ export function AuthPage({ mode }) {
             </div>
             <div className="module-cta-row">
               <Link className="btn btn-ghost" to={`/legal/disclosure?plan=${form.plan}`}>
-                Review legal disclosure
+                Review disclosure
               </Link>
             </div>
           </div>
@@ -113,7 +117,6 @@ export function AuthPage({ mode }) {
             <input
               value={form.name}
               onChange={(event) => setForm((state) => ({ ...state, name: event.target.value }))}
-              placeholder="Jordan Rivera"
               autoComplete="name"
               required
             />
@@ -126,7 +129,6 @@ export function AuthPage({ mode }) {
             type="email"
             value={form.email}
             onChange={(event) => setForm((state) => ({ ...state, email: event.target.value }))}
-            placeholder="jordan@example.com"
             autoComplete="email"
             required
           />
@@ -138,7 +140,6 @@ export function AuthPage({ mode }) {
             type="password"
             value={form.password}
             onChange={(event) => setForm((state) => ({ ...state, password: event.target.value }))}
-            placeholder="At least 8 characters"
             autoComplete={isSignIn ? "current-password" : "new-password"}
             minLength={8}
             required
@@ -152,9 +153,11 @@ export function AuthPage({ mode }) {
               value={form.plan}
               onChange={(event) => setForm((state) => ({ ...state, plan: event.target.value }))}
             >
-              <option value="saver">Money saver</option>
-              <option value="legal">Legal shield</option>
-              <option value="build">Build smarter</option>
+              {kovaProducts.map((product) => (
+                <option value={product.slug} key={product.slug}>
+                  {product.name}
+                </option>
+              ))}
             </select>
           </label>
         ) : null}

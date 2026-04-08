@@ -70,7 +70,7 @@ export function DashboardPage() {
               <div className="agreement-note">
                 <strong>Live integrations</strong>
                 <p>
-                  Gemini: {integrationStatus?.gemini ? "connected" : "missing"} · Supabase:{" "}
+                  Brain: {integrationStatus?.brain ? "connected" : "missing"} · Supabase:{" "}
                   {integrationStatus?.supabase ? "connected" : "missing"} · Auth tables:{" "}
                   {integrationStatus?.authUsers ? "active" : "inactive"}
                 </p>
@@ -84,10 +84,10 @@ export function DashboardPage() {
         <div className="dashboard-side-stack">
           <article className="panel">
             <span className="panel-kicker">Current path</span>
-            <h3>{dashboard?.path?.name || "Legal shield"}</h3>
+            <h3>{dashboard?.path?.name || "Document brain"}</h3>
             <p className="panel-copy">{dashboard?.path?.summary || "Your product path is loaded from the backend."}</p>
             <div className="module-cta-row">
-              <Link className="btn btn-primary" to={`/products/${dashboard?.path?.slug || "legal"}`}>
+              <Link className="btn btn-primary" to={`/products/${dashboard?.path?.slug || "saver"}`}>
                 Open path
               </Link>
               <Link className="btn btn-ghost" to="/pricing">
@@ -109,8 +109,8 @@ export function DashboardPage() {
               <Link className="btn btn-ghost" to="/app/admin/review">
                 Admin review
               </Link>
-              <Link className="btn btn-ghost" to="/app/ai">
-                Ask Gemini
+              <Link className="btn btn-ghost" to="/app/brain">
+                Open brain
               </Link>
               <Link className="btn btn-ghost" to="/app/status">
                 Integration status

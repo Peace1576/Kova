@@ -1,5 +1,7 @@
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY || "";
-const GEMINI_MODEL = process.env.GEMINI_MODEL || "gemini-2.0-flash";
+const BRAIN_API_KEY = process.env.BRAIN_API_KEY || process.env.GROQ_API_KEY || "";
+const BRAIN_MODEL = process.env.BRAIN_MODEL || "llama-3.1-70b-versatile";
+const LEGACY_BRAIN_API_KEY = process.env.GEMINI_API_KEY || "";
+const LEGACY_BRAIN_MODEL = process.env.GEMINI_MODEL || "gemini-2.0-flash";
 const SUPABASE_URL = (process.env.SUPABASE_URL || "").replace(/\/+$/, "");
 const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || "";
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
@@ -137,20 +139,52 @@ export async function supabaseDelete(table, query) {
 
 export function getIntegrationStatus() {
   return {
-    gemini: Boolean(GEMINI_API_KEY),
+    brain: Boolean(BRAIN_API_KEY || LEGACY_BRAIN_API_KEY),
+    brainProvider: BRAIN_API_KEY ? "groq" : LEGACY_BRAIN_API_KEY ? "legacy" : "missing",
     supabase: supabaseConfigured(),
     authUsers: supabaseConfigured(),
     supabaseSchema: SUPABASE_SCHEMA,
-    geminiModel: GEMINI_MODEL,
+    brainModel: BRAIN_API_KEY ? BRAIN_MODEL : LEGACY_BRAIN_MODEL,
   };
 }
 
-export async function askGemini({ systemInstruction = "", prompt, temperature = 0.2, maxOutputTokens = 1024 }) {
-  if (!GEMINI_API_KEY) {
-    throw new Error("Gemini is not configured. Set GEMINI_API_KEY in your environment.");
+async function askGroq({ systemInstruction = "", prompt, temperature = 0.2, maxOutputTokens = 1024 }) {
+  const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${BRAIN_API_KEY}`,
+    },
+    body: JSON.stringify({
+      model: BRAIN_MODEL,
+      messages: [
+        ...(systemInstruction
+          ? [{ role: "system", content: systemInstruction }]
+          : []),
+        { role: "user", content: prompt },
+      ],
+      temperature,
+      max_tokens: maxOutputTokens,
+    }),
+  });
+
+  const payload = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    const message = payload?.error?.message || `Brain request failed (${response.status})`;
+    throw new Error(message);
   }
 
-  const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${encodeURIComponent(GEMINI_API_KEY)}`, {
+  const text = payload?.choices?.[0]?.message?.content?.trim() || "";
+  return {
+    provider: "groq",
+    model: BRAIN_MODEL,
+    text,
+    raw: payload,
+  };
+}
+
+async function askLegacyBrain({ systemInstruction = "", prompt, temperature = 0.2, maxOutputTokens = 1024 }) {
+  const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${LEGACY_BRAIN_MODEL}:generateContent?key=${encodeURIComponent(LEGACY_BRAIN_API_KEY)}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -176,16 +210,29 @@ export async function askGemini({ systemInstruction = "", prompt, temperature = 
 
   const payload = await response.json().catch(() => ({}));
   if (!response.ok) {
-    const message = payload?.error?.message || `Gemini request failed (${response.status})`;
+    const message = payload?.error?.message || `Brain request failed (${response.status})`;
     throw new Error(message);
   }
 
   const text = payload?.candidates?.[0]?.content?.parts?.map((part) => part.text || "").join("").trim() || "";
   return {
-    model: GEMINI_MODEL,
+    provider: "legacy",
+    model: LEGACY_BRAIN_MODEL,
     text,
     raw: payload,
   };
+}
+
+export async function askBrain({ systemInstruction = "", prompt, temperature = 0.2, maxOutputTokens = 1024 }) {
+  if (BRAIN_API_KEY) {
+    return askGroq({ systemInstruction, prompt, temperature, maxOutputTokens });
+  }
+
+  if (LEGACY_BRAIN_API_KEY) {
+    return askLegacyBrain({ systemInstruction, prompt, temperature, maxOutputTokens });
+  }
+
+  throw new Error("The brain is not configured. Set BRAIN_API_KEY in your environment.");
 }
 
 export async function mirrorSupabaseEvent(table, payload) {

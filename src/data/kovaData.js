@@ -32,24 +32,24 @@ export const kovaProducts = [
   },
   {
     slug: "legal",
-    name: "Legal shield",
+    name: "Document brain",
     badge: "Most popular",
     color: "purple",
     price: "$39/mo",
     summary:
-      "Upload leases, NDAs, or vendor agreements and get a risk report in under a minute.",
-    heroTitle: "Protect every agreement.",
+      "Upload contracts, policies, or vendor terms and get a plain-English plan in under a minute.",
+    heroTitle: "Understand every document.",
     heroCopy:
-      "Kova reads every clause, flags what is risky, and drafts pushback language.",
-    features: ["Instant risk scan", "Pushback language", "Document vault", "Renewal alerts"],
+      "Kova reads the text, highlights what matters, and helps you decide the next move.",
+    features: ["Instant document scan", "Clear next steps", "Document vault", "Renewal alerts"],
     metrics: [
-      { label: "Clauses reviewed", value: "12", sub: "3 need attention" },
+      { label: "Docs reviewed", value: "12", sub: "3 need attention" },
       { label: "Speed", value: "60 sec", sub: "To first report" },
-      { label: "Action", value: "Pushback", sub: "Ready to send" },
+      { label: "Action", value: "Plan", sub: "Ready to use" },
     ],
     details: [
-      "Plain-English explanations for every clause.",
-      "State-aware citations and legal basis.",
+      "Plain-English explanations for every section.",
+      "Helpful context for decisions and approvals.",
       "Encrypted vault with revocation controls.",
     ],
     colorValue: "#7B72E9",
@@ -58,7 +58,7 @@ export const kovaProducts = [
   {
     slug: "build",
     name: "Build smarter",
-    badge: "$299/mo",
+    badge: "For teams",
     color: "amber",
     price: "$299/mo",
     summary:
@@ -94,13 +94,13 @@ export const pricingPlans = [
   },
   {
     slug: "legal",
-    name: "Legal shield",
+    name: "Document brain",
     monthly: "$39",
     annual: "$31",
     subMonthly: "per month · cancel anytime",
     subAnnual: "per month · billed $374/yr",
     featured: true,
-    features: ["Unlimited document analysis", "Risk scoring", "Pushback language", "Encrypted vault"],
+    features: ["Unlimited document analysis", "Decision support", "Next steps", "Encrypted vault"],
   },
   {
     slug: "build",
@@ -151,7 +151,7 @@ export const systemTree = [
     items: ["Plaid and bill upload", "Negotiation agent", "Savings ledger", "Win card"],
   },
   {
-    title: "Legal shield",
+    title: "Document brain",
     accent: "purple",
     items: ["PDF parser", "Clause classifier", "Jurisdiction engine", "Document vault"],
   },

@@ -60,6 +60,7 @@ export const api = {
   reviewAgreement: (slug, body) =>
     request(`/api/admin/agreements/${slug}/review`, { method: "POST", body: JSON.stringify(body || {}) }),
   integrationStatus: () => request("/api/integrations/status"),
+  brainChat: (body) => request("/api/brain/chat", { method: "POST", body: JSON.stringify(body || {}) }),
   aiChat: (body) => request("/api/ai/chat", { method: "POST", body: JSON.stringify(body || {}) }),
   dashboard: () => request("/api/dashboard"),
   flow: (slug) => request(`/api/flows/${slug}`),

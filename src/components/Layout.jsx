@@ -1,4 +1,5 @@
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 const navItems = [
   { to: "/", label: "Home" },
@@ -7,11 +8,19 @@ const navItems = [
   { to: "/mobile", label: "Mobile" },
   { to: "/system", label: "System" },
   { to: "/agreements", label: "Agreements" },
-  { to: "/app/ai", label: "AI" },
+  { to: "/app/brain", label: "Brain" },
   { to: "/app", label: "Dashboard" },
 ];
 
 export function Layout({ children }) {
+  const navigate = useNavigate();
+  const { user, signOut } = useAuth();
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate("/");
+  };
+
   return (
     <div className="app-shell">
       <div className="orb orb-a" />
@@ -40,15 +49,23 @@ export function Layout({ children }) {
         </nav>
 
         <div className="topbar-actions">
-          <Link className="topbar-pill" to="/legal/disclosure?plan=legal">
-            Legal shield active
+          <Link className="topbar-pill" to="/app/brain">
+            Kova brain active
           </Link>
-          <Link className="btn btn-ghost btn-sm" to="/sign-in">
-            Sign in
-          </Link>
-          <Link className="btn btn-primary btn-sm" to="/legal/disclosure?plan=legal">
-            Start free
-          </Link>
+          {user ? (
+            <button className="btn btn-ghost btn-sm" type="button" onClick={handleSignOut}>
+              Sign out
+            </button>
+          ) : (
+            <>
+              <Link className="btn btn-ghost btn-sm" to="/sign-in">
+                Sign in
+              </Link>
+              <Link className="btn btn-primary btn-sm" to="/legal/disclosure?plan=legal">
+                Start free
+              </Link>
+            </>
+          )}
         </div>
       </header>
 
@@ -66,7 +83,7 @@ export function Layout({ children }) {
           <span>kova</span>
           <em>.</em>
         </Link>
-        <p>AI advocate for money, rights, and permits.</p>
+        <p>Kova Brain for money, rights, and permits.</p>
         <Link className="footer-link" to="/pricing">
           See pricing
         </Link>
